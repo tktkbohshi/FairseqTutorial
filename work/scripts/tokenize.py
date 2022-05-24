@@ -1,4 +1,3 @@
-from posixpath import expanduser
 import sentencepiece as spm
 
 sp = spm.SentencePieceProcessor()

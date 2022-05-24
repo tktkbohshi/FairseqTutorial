@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CUDA_VISIBLE_DEVICES=1 fairseq-train data/perchat/bin/ \
+fairseq-train data/perchat/bin/ \
  --arch transformer \
  --finetune-from-model data/pretrained/japanese-dialog-transformer-1.6B.pt \
  --task translation \

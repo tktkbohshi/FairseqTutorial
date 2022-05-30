@@ -2,7 +2,7 @@
 Fairseq初心者のための日本語チュートリアルです．
 NTTが公開している対話システム用大規模言語モデルであるJapanese Dialog Transformerのファインチューニング，及びCNN+LSTMのレガシーな画像キャプション生成モデルの作成と学習を行います．このチュートリアルを通して  
 - 基本的なfairseq-cliの使い方  
-- fairseqの主な仕組み  
+- fairseqの大まかな仕組み  
 - fairseqのカスタマイズ方法  
 
 の習得を目指します．  

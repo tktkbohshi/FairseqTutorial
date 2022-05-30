@@ -1,12 +1,11 @@
 #!/bin/bash
 
-fairseq-train data/perchat/bin/ \
+fairseq-train \
+ --user-dir scripts/customs \
  --arch image_caption \
  --task captioning \
  --save-dir result/captioning/ \
  --criterion cross_entropy \
- --source-lang src \
- --target-lang dst \
  --tokenizer space \
  --bpe sentencepiece \
  --sentencepiece-model data/sentencepiece/sp_oall_32k.model \
@@ -15,5 +14,4 @@ fairseq-train data/perchat/bin/ \
  --save-interval 5 \
  --lr 0.001 \
  --max-epoch 20 \
- --optimizer adafactor \
- --user-dir ./scripts/customs
+ --optimizer adafactor 

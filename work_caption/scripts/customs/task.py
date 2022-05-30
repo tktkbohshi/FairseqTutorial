@@ -6,8 +6,8 @@ from fairseq.tasks import FairseqTask, register_task
 
 # Import for registration of captioning model
 # and self-critical sequence training criterion.
-import model.caption
-import scst.criterion
+#import model.caption
+#import scst.criterion
 
 
 @register_task('captioning')
@@ -22,10 +22,8 @@ class CaptioningTask(FairseqTask):
                             help='image captions directory')
         parser.add_argument('--captions-lang', default='en', choices=['en'],
                             help='caption language')
-        parser.add_argument('--max-source-positions', default=64, type=int, metavar='N',
-                            help='max number of objects in the source image')
-        parser.add_argument('--max-target-positions', default=1024, type=int, metavar='N',
-                            help='max number of tokens in the target sequence')
+        #parser.add_argument('--max-source-positions', default=64, type=int, metavar='N', help='max number of objects in the source image')
+        #parser.add_argument('--max-target-positions', default=1024, type=int, metavar='N', help='max number of tokens in the target sequence')
 
     @classmethod
     def setup_task(cls, args, **kwargs):

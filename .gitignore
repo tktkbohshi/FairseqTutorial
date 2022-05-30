@@ -1,3 +1,6 @@
+# dataset
+work_caption/data/datalab-cup3-reverse-image-caption-2021/*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

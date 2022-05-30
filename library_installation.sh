@@ -8,7 +8,7 @@ pip install --upgrade pip
 ##########################################################################################################################################
 
 # Install the latest fairseq
-git clone git clone https://github.com/pytorch/fairseq
+git clone https://github.com/pytorch/fairseq
 cd fairseq
 pip install --editable ./
 

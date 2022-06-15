@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 class CrossEntropyCriterionConfig(FairseqDataclass):
     sentence_avg: bool = II("optimization.sentence_avg")
 
-@register_criterion("forcal", dataclass=CrossEntropyCriterionConfig)
+@register_criterion("focal", dataclass=CrossEntropyCriterionConfig)
 class ForcalLoss(FairseqCriterion):
     def __init__(self, task, sentence_avg):
         super().__init__(task)

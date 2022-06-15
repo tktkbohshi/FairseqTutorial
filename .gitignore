@@ -1,5 +1,13 @@
 # dataset
 work_caption/data/datalab-cup3-reverse-image-caption-2021/*
+work_caption/data/sp/sp_oall_32k.model
+work_caption/data/sp/sp_oall_32k.txt
+work_caption/data/sp/sp_oall_32k.vocab
+work_caption/result/*
+work_dialog/data/sp/*
+work_dialog/data/perchat/*
+work_dialog/data/pretrained/*
+
 
 # library
 fairseq/

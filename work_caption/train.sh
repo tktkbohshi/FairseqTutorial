@@ -5,10 +5,11 @@ fairseq-train \
  --arch image_caption \
  --task captioning \
  --save-dir result/captioning/ \
- --criterion cross_entropy \
+ --captions-dir data/datalab-cup3-reverse-image-caption-2021 \
+ --criterion focal \
  --tokenizer space \
  --bpe sentencepiece \
- --sentencepiece-model data/sentencepiece/sp_oall_32k.model \
+ --sentencepiece-model data/sp/sp_oall_32k.model \
  --batch-size 4 \
  --update-freq 16\
  --save-interval 5 \

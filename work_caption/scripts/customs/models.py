@@ -11,15 +11,15 @@ from torch.nn.utils.rnn import pack_padded_sequence
 class CNNEncoder(FairseqEncoder):
     def __init__(self, embed_size):
         # Load the pretrained ResNet-152 and replace top fc layer.
-        super(CNNEncoder, self).__init__()
+        super(CNNEncoder, self).__init__(dictionary=None)
         resnet = models.resnet152(pretrained=True)
         modules = list(resnet.children())[:-1]      # delete the last fc layer.
         self.resnet = nn.Sequential(*modules)
         self.linear = nn.Linear(resnet.fc.in_features, embed_size)
         self.bn = nn.BatchNorm1d(embed_size, momentum=0.01)
         
-    def forward(self, images):
-        #Extract feature vectors from input images 
+    def forward(self, images, src_lengths):
+        #Extract feature vectors from input images
         with torch.no_grad():
             features = self.resnet(images)
         features = features.reshape(features.size(0), -1)
@@ -27,17 +27,16 @@ class CNNEncoder(FairseqEncoder):
         return features
 
 class LSTMDecoder(FairseqDecoder):
-    def __init__(self, dictionary, encoder_hidden_dim=128, embed_dim=128, hidden_dim=128):
+    def __init__(self, dictionary, encoder_hidden_dim=256, embed_dim=256, hidden_dim=256):
         super().__init__(dictionary)
 
         self.embed_tokens = nn.Embedding(
             num_embeddings=len(dictionary),
             embedding_dim=embed_dim,
-            padding_idx=dictionary.pad(),
+            padding_idx=0,
         )
-
         self.lstm = nn.LSTM(
-            input_size=encoder_hidden_dim + embed_dim,
+            input_size=encoder_hidden_dim,
             hidden_size=hidden_dim,
             num_layers=1,
             bidirectional=False,
@@ -47,6 +46,7 @@ class LSTMDecoder(FairseqDecoder):
         self.output_projection = nn.Linear(hidden_dim, len(dictionary))
 
     def forward(self, prev_output_tokens, encoder_out):
+        print(prev_output_tokens)
         """
         Args:
             prev_output_tokens (LongTensor): previous decoder outputs of shape
@@ -62,21 +62,9 @@ class LSTMDecoder(FairseqDecoder):
                   `(batch, tgt_len, src_len)`
         """
         bsz, tgt_len = prev_output_tokens.size()
-
-        final_encoder_hidden = encoder_out['final_hidden']
-
-        x = self.embed_tokens(prev_output_tokens)
-        x = torch.cat(
-            [x, final_encoder_hidden.unsqueeze(1).expand(bsz, tgt_len, -1)],
-            dim=2,
-        )
-        initial_state = (
-            final_encoder_hidden.unsqueeze(0),  # hidden
-            torch.zeros_like(final_encoder_hidden).unsqueeze(0),  # cell
-        )
+        x = prev_output_tokens
         output, _ = self.lstm(
             x.transpose(0, 1),  # convert to shape `(tgt_len, bsz, dim)`
-            initial_state,
         )
         x = output.transpose(0, 1)  # convert to shape `(bsz, tgt_len, hidden)`
         x = self.output_projection(x)
@@ -116,10 +104,7 @@ class ImageCaptionModel(FairseqEncoderDecoderModel):
 
         # Initialize our Encoder and Decoder.
         encoder = CNNEncoder(
-            args=args,
-            dictionary=task.source_dictionary,
-            embed_dim=args.encoder_embed_dim,
-            hidden_dim=args.encoder_hidden_dim,
+            embed_size=args.encoder_embed_dim
         )
         decoder = LSTMDecoder(
             dictionary=task.target_dictionary,

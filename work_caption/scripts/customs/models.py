@@ -8,8 +8,9 @@ from fairseq.models import register_model, register_model_architecture, transfor
 import torch.nn as nn
 from torch.nn.utils.rnn import pack_padded_sequence
 
+# FairseqEncoderクラスを継承しておくのが無難
 class CNNEncoder(FairseqEncoder):
-    def __init__(self, embed_size):
+    def __init__(self, embed_size=256):
         # Load the pretrained ResNet-152 and replace top fc layer.
         super(CNNEncoder, self).__init__(dictionary=None)
         resnet = models.resnet152(pretrained=True)
@@ -24,8 +25,10 @@ class CNNEncoder(FairseqEncoder):
             features = self.resnet(images)
         features = features.reshape(features.size(0), -1)
         features = self.bn(self.linear(features))
+        print(features.size())
         return features
 
+# FairseqDecoderクラスを継承しておくのが無難
 class LSTMDecoder(FairseqDecoder):
     def __init__(self, dictionary, encoder_hidden_dim=256, embed_dim=256, hidden_dim=256):
         super().__init__(dictionary)
@@ -47,24 +50,10 @@ class LSTMDecoder(FairseqDecoder):
 
     def forward(self, prev_output_tokens, encoder_out):
         print(prev_output_tokens)
-        """
-        Args:
-            prev_output_tokens (LongTensor): previous decoder outputs of shape
-                `(batch, tgt_len)`, for teacher forcing
-            encoder_out (Tensor, optional): output from the encoder, used for
-                encoder-side attention
-
-        Returns:
-            tuple:
-                - the last decoder layer's output of shape
-                  `(batch, tgt_len, vocab)`
-                - the last decoder layer's attention weights of shape
-                  `(batch, tgt_len, src_len)`
-        """
         bsz, tgt_len = prev_output_tokens.size()
         x = prev_output_tokens
         output, _ = self.lstm(
-            x.transpose(0, 1),  # convert to shape `(tgt_len, bsz, dim)`
+            x,  # convert to shape `(tgt_len, bsz, dim)`
         )
         x = output.transpose(0, 1)  # convert to shape `(bsz, tgt_len, hidden)`
         x = self.output_projection(x)
@@ -127,7 +116,7 @@ from fairseq.models import register_model_architecture
 # to match the desired architecture.
 
 @register_model_architecture('image_caption', 'image_caption')
-def tutorial_simple_lstm(args):
+def tutorial_simple_caption(args):
     # We use ``getattr()`` to prioritize arguments that are explicitly given
     # on the command-line, so that the defaults defined below are only used
     # when no other value has been specified.

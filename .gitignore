@@ -7,6 +7,7 @@ work_caption/result/*
 work_dialog/data/sp/*
 work_dialog/data/perchat/*
 work_dialog/data/pretrained/*
+work_dialog/scripts/extract_persona_chat.py
 
 
 # library

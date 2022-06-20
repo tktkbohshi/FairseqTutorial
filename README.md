@@ -24,3 +24,7 @@ NTTが公開している対話システム用大規模言語モデルであるJa
 `/materials`: チュートリアルスライド(pdf形式)置き場  
 `/work_dialog`: Japanese Dialog Transformerのファインチューニングのハンズオンの作業ディレクトリ  
 `/work_caption`: 画像キャプション生成のハンズオンの作業ディレクトリ  
+
+## 使い方  
+1. `$sh library_installation.sh`を実行して，必要なライブラリをインストールしてください．  
+2. その後，任意の作業ディレクトリに移動し，READMEに従ってください．  

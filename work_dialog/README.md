@@ -2,7 +2,7 @@
 ## データのダウンロードと前処理  
 1. `$sh data_download.sh`を実行（時間がかかります）．  
 2. `$python scripts/extract_persona.py japanese_persona_chat.xlsx data/personal/raw/`でデータセットの分割を行う．  
-3. `$python scripts/tokenize.py`でトークナイズを行う．  
+3. `$python scripts/tokenize_sp.py`でトークナイズを行う．  
 
 ## 学習の実行  
 `$sh train.sh`を実行する．  
